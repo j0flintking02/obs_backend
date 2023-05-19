@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  node-app:
+    build: .
+    image: node-app
+    environment:
+      - DATABASE_URL=postgresql://postgres:Root@localhost/TEST
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/node-app
+    networks:
+      - node-network
+
+  postgres:
+    image: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - node-network
+
+volumes:
+  dbdata:
+
+networks:
+  node-network:
+    driver: bridge
